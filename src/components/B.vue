@@ -8,7 +8,7 @@
 export default {
   data () {
     return {
-      hello: 'i am component A'
+      hello: 'i am component B'
     }
   }
 }
