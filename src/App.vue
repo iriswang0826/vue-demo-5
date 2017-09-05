@@ -7,19 +7,32 @@
     <button v-on:click="toggleCom">
       ToggleCom
     </button>
+    <button v-on:click="show = !show">
+      ToggleJs
+    </button>
     <div class="ab">
+      <!-- css过渡 -->
       <!-- <transition name="fade">
         <p v-show="show">i am show</p>
       </transition> -->
-      <transition name="my-trans" mode="out-in">
+      <!-- <transition name="my-trans" mode="out-in"> -->
         <!-- <p v-show="show">i am show</p> -->
         <!-- <p v-if="show">i am show</p> -->
         <!-- 动态组件 -->
          <!-- <div :is="currentView"></div> -->
         <!-- 多元素过渡 标签相同需要指定key-->
-        <p v-if="show" key="1">i am show</p>
+        <!-- <p v-if="show" key="1">i am show</p> -->
         <!-- <div v-else>not in show</div> -->
-        <p v-else key="2">not in show</p>
+        <!-- <p v-else key="2">not in show</p> -->
+      <!-- </transition> -->
+      <!-- JS过渡 -->
+      <transition
+      v-on:before-enter="beforeEnter"
+      v-on:enter="enter"
+      v-on:leave="leave"
+      v-bind:css="false">
+        <p class="animate-p" v-show="show">i am show</p>
+
       </transition>
     </div>
   </div>
@@ -29,6 +42,8 @@
 // import Vue from 'vue'
 import ComA from './components/A'
 import ComB from './components/B'
+import $ from 'jquery'
+
 export default {
   components: {
     ComA, ComB
@@ -40,6 +55,30 @@ export default {
     }
   },
   methods: {
+    beforeEnter: function (el) {
+      $(el).css({
+        left: '-500px',
+        opacity: 0
+      })
+    },
+    enter: function (el, done) {
+      $(el).animate({
+        left: 0,
+        opacity: 1
+      }, {
+        duration: 1500,
+        complete: done
+      })
+    },
+    leave: function (el, done) {
+      $(el).animate({
+        left: '500px',
+        opacity: 0
+      }, {
+        duration: 1500,
+        complete: done
+      })
+    },
     toggleCom () {
       if (this.currentView === 'com-a') {
         this.currentView = 'com-b'
@@ -79,5 +118,10 @@ body {
 .my-trans-leave-to {
   transform: translateY(500px);
   opacity: 0;
+}
+.animate-p {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 </style>
